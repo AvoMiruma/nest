@@ -4,6 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Observable } from "rxjs";
 import { ROLES_KEY } from "./roles-auth.decorator";
 
+// Test git branch
 @Injectable()
 export class RolesGuard implements CanActivate{
     constructor(private readonly jwtService: JwtService,
