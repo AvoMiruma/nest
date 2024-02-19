@@ -2,9 +2,10 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuard
 import { RoleService } from './role.service';
 import { RoleDto } from './dto/role.dto';
 import { DeleteRoleDto } from './dto/deleteRole.dto';
-import { Roles } from 'src/auth/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { RoleGuard } from 'src/auth/role/role.guard';
 
 @ApiTags('Операції з ролями користувача')
 @Controller('role')
@@ -14,7 +15,7 @@ export class RoleController {
   @ApiOperation({summary: 'Виведення всіх існуючих ролей'})
   @ApiResponse({status: 200, type: [RoleDto]})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('get')
   getAll() {
     return this.roleService.getAll()
@@ -23,7 +24,7 @@ export class RoleController {
   @ApiOperation({summary: 'Пошук ролі по Id'})
   @ApiResponse({status: 200, type: RoleDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('get/:id')
   getById(@Param('id', ParseIntPipe) id: number) {
     return this.roleService.getById(id);
@@ -32,7 +33,7 @@ export class RoleController {
   @ApiOperation({summary: 'Створення нової ролі'})
   @ApiResponse({status: 200, type: RoleDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Post('create')
   @UsePipes(new ValidationPipe())
   create(@Body() dto: RoleDto) {
@@ -42,7 +43,7 @@ export class RoleController {
   @ApiOperation({summary: 'Зміна опису до ролі'})
   @ApiResponse({status: 200, type: RoleDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Put('update')
   @UsePipes(new ValidationPipe())
   changeRoleDescription(@Body() dto: RoleDto) {
@@ -52,7 +53,7 @@ export class RoleController {
   @ApiOperation({summary: 'Видалення ролі'})
   @ApiResponse({status: 200, type: RoleDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete()
   @UsePipes(new ValidationPipe())
   delete(@Body() dto: DeleteRoleDto) {

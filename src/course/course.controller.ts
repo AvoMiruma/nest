@@ -3,8 +3,11 @@ import { CourseService } from './course.service';
 import { CourseDto } from './dto/Course.dto';
 import { DeleteCourseDto } from './dto/deleteCourse.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/auth/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { RoleGuard } from 'src/auth/role/role.guard';
+
+
 
 @ApiTags('Операції з курсами країн')
 @Controller('course')
@@ -13,8 +16,8 @@ export class CourseController {
 
   @ApiOperation({summary: 'Отримання усіх курсів'})
   @ApiResponse({status: 200, type: [CourseDto]})
-  @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @Roles("USER")
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('get')
   getAll() {
     return this.courseService.getAll();
@@ -22,8 +25,8 @@ export class CourseController {
 
   @ApiOperation({summary: 'Отримання курсу по Id'})
   @ApiResponse({status: 200, type:CourseDto})
-  @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @Roles("USER")
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('get/:id')
   getById(@Param('id', ParseIntPipe) id: number) {
     return this.courseService.getById(id);
@@ -32,7 +35,7 @@ export class CourseController {
   @ApiOperation({summary: 'Створення курсу'})
   @ApiResponse({status: 200, type: CourseDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Post('create')
   @UsePipes(new ValidationPipe())
   create(@Body() dto: CourseDto) {
@@ -42,7 +45,7 @@ export class CourseController {
   @ApiOperation({summary: 'Зміна курсу валют'})
   @ApiResponse({status: 200, type: CourseDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Put('update')
   @UsePipes(new ValidationPipe())
   changeCourse(@Body() dto: CourseDto) {
@@ -52,7 +55,7 @@ export class CourseController {
   @ApiOperation({summary: 'Видалення курсу'})
   @ApiResponse({status: 200, type: DeleteCourseDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete('delete')
   @UsePipes(new ValidationPipe())
   delete(@Body() dto: DeleteCourseDto) {

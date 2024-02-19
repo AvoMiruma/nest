@@ -27,7 +27,7 @@ export class UserService {
     }
 
     async getUserByRole(dto: UserRoleDto) {
-        const users = await this.databaseService.user.findMany({where: {roleId: dto.roleId}})
+        const users = await this.databaseService.user.findMany({where: {roleName: dto.roleName}})
         if(!users) {
             throw new NotFoundException({message: "Користувача з такою роллю не знайдено"})
         }

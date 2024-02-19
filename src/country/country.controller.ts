@@ -2,10 +2,11 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuard
 import { CountryService } from './country.service';
 import { CreateCountryDto } from './dto/createCountry.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/auth/roles-auth.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ChangeCountryNameDto } from './dto/changeCountry.dto';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { RoleGuard } from 'src/auth/role/role.guard';
+
 
 @ApiTags('Операції з країнами')
 @Controller('country')
@@ -14,7 +15,8 @@ export class CountryController {
 
   @ApiOperation({summary: 'Пошук країни по Id'})
   @ApiResponse({status: 200, type: CreateCountryDto})
-  @UseGuards(JwtAuthGuard)
+  @Roles("USER")
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('get/:id')
   getById(@Param('id', ParseIntPipe) id: number) {
     return this.countryService.getById(id);
@@ -22,7 +24,8 @@ export class CountryController {
 
   @ApiOperation({summary: 'Виведення усіх країн'})
   @ApiResponse({status: 200, type: [CreateCountryDto]})
-  @UseGuards(JwtAuthGuard)
+  @Roles("USER")
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('get')
   getAll() {
     return this.countryService.getAll();
@@ -31,7 +34,7 @@ export class CountryController {
   @ApiOperation({summary: 'Створення країни'})
   @ApiResponse({status: 200, type: CreateCountryDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Post('create')
   @UsePipes(new ValidationPipe())
   create(@Body() dto: CreateCountryDto) {
@@ -40,7 +43,8 @@ export class CountryController {
 
   @ApiOperation({summary: 'Зміна назви країни'})
   @ApiResponse({status: 200, type: CreateCountryDto})
-  @UseGuards(JwtAuthGuard)
+  @Roles("ADMIN")
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Put('update')
   @UsePipes(new ValidationPipe())
   changeCountryName(@Body() dto: ChangeCountryNameDto) {
@@ -50,7 +54,7 @@ export class CountryController {
   @ApiOperation({summary: 'Видалення країни'})
   @ApiResponse({status: 200, type: CreateCountryDto})
   @Roles("ADMIN")
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete('delete/:id')
   deleteById(@Param('id', ParseIntPipe) id: number) {
     return this.countryService.delete(id);

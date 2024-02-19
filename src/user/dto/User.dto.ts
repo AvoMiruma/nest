@@ -18,6 +18,6 @@ export class UserDto {
     @IsInt()
     countryId: number
 
-    @IsInt()
-    roleId: number
+    @IsString()
+    roleName: string
 }

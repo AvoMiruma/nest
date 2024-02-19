@@ -9,19 +9,19 @@ datasource db {
 
 
 model User {
-  id        Int @default(autoincrement()) @id
-  email     String @unique
+  id        Int     @default(autoincrement()) @id
+  email     String  @unique
   password  String
   name      String
-  role      Role @relation(fields: [roleId], references: [id])
-  roleId    Int
+  role      Role    @relation(fields: [roleName], references: [role])
+  roleName  String  
   country   Country @relation(fields: [countryId], references: [id])
   countryId Int
 }
 
 model Country {
-  id        Int @default(autoincrement()) @id
-  name      String @unique
+  id        Int     @default(autoincrement()) @id
+  name      String  @unique
   currency  String
   course    Course?
   users     User[]
@@ -36,9 +36,10 @@ model Course {
 }
 
 model Role {
-  id          Int @default(autoincrement()) @id
-  role        String @unique
+  id          Int     @default(autoincrement()) @id
+  role        String  @unique
   description String
   users       User[]
 }
+
 
