@@ -10,7 +10,7 @@ import { RoleGuard } from 'src/auth/role/role.guard';
 import { Roles } from 'src/auth/roles/roles.decorator';
 
 
-@ApiTags('Операції з користувачами')
+@ApiTags('User-Controller')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

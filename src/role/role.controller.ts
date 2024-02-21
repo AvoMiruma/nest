@@ -7,7 +7,7 @@ import { Roles } from 'src/auth/roles/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RoleGuard } from 'src/auth/role/role.guard';
 
-@ApiTags('Операції з ролями користувача')
+@ApiTags('Role-Controller')
 @Controller('role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}

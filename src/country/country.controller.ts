@@ -8,7 +8,7 @@ import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RoleGuard } from 'src/auth/role/role.guard';
 
 
-@ApiTags('Операції з країнами')
+@ApiTags('Country-Controller')
 @Controller('country')
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}
